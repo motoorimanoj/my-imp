@@ -1,0 +1,64 @@
+
+resource "aws_vpc" "newvpc" {
+  cidr_block       = "11.0.0.0/16"
+  instance_tenancy = "default"
+
+  tags = {
+    Name = "newvpc"
+  }
+}
+#=======================================
+#create a subnet
+
+resource "aws_subnet" "sonu1" {
+  vpc_id     = aws_vpc.newvpc.id
+  cidr_block = "11.0.1.0/24"
+
+  tags = {
+    Name = "my1"
+  }
+}
+
+resource "aws_subnet" "sonu2" {
+  vpc_id     = aws_vpc.newvpc.id
+  cidr_block = "11.0.2.0/24"
+
+  tags = {
+    Name = "My2"
+  }
+}
+resource "aws_subnet" "sonu3" {
+  vpc_id     = aws_vpc.newvpc.id
+  cidr_block = "11.0.3.0/24"
+
+  tags = {
+    Name = "My3"
+  }
+}
+
+#=======================================
+#INTERNET gateway
+
+resource "aws_internet_gateway" "ig-gateway" {
+  vpc_id = aws_vpc.newvpc.id
+
+  tags = {
+    Name = "ig-gateway"
+  }
+}
+#======================================
+#Route tables
+
+resource "aws_route_table" "my-route" {
+  vpc_id = aws_vpc.newvpc.id
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.ig-gateway.id
+  }
+
+  
+  tags = {
+    Name = "lila1"
+  }
+}
